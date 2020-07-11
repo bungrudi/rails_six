@@ -1,0 +1,60 @@
+# image name: kadriansyah/nginx
+FROM  kadriansyah/nginx
+LABEL version="1.0"
+LABEL maintainer="Kiagus Arief Adriansyah <kadriansyah@gmail.com>"
+
+RUN set -ex \
+    && buildDeps=' \
+            gcc \
+            make \
+            libxml2 \
+            libxml2-dev \
+            libxslt1-dev \
+            zlib1g-dev \
+            build-essential \
+    ' \
+    && apt-get update \
+    && apt-get install -yqq --no-install-recommends $buildDeps;
+
+COPY rails_six.pem /etc/ssl/
+COPY rails_six.key /etc/ssl/
+COPY rails_six.com /etc/nginx/sites-available/
+RUN ln -s /etc/nginx/sites-available/rails_six.com /etc/nginx/sites-enabled/rails_six.com
+
+RUN mkdir /var/www/html/rails_six.com
+RUN chown -R app:app /var/www/html/rails_six.com
+WORKDIR /var/www/html/rails_six.com
+COPY --chown=app:app . .
+RUN chmod +x reload.sh
+RUN chmod +x rails_s.sh
+
+ENV RAILS_ENV='production'
+RUN gem install bundler:2.1.2;
+RUN set -ex \
+    && bundle config build.nokogiri --use-system-libraries \
+    && gem install pkg-config -v "~> 1.1" \
+    && bundle install --jobs 20 --retry 5 \
+    && yarn install --check-files \
+    && chown -R app:app .bundle;
+
+# make sure we make log and tmp owned by app
+RUN set -ex \
+    && rm -rf log \
+    && mkdir log \
+    && rm -rf tmp \
+    && mkdir tmp \
+    && rails assets:clobber && rails assets:precompile \
+    && chown -R app:app /var/www/html/rails_six.com/public \
+    && chown -R app:app tmp \
+    && chown -R app:app log;
+
+RUN set -ex \
+    && apt-get purge -yqq $buildDeps --auto-remove;
+
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+# You cannot open privileged ports (<=1024) as non-root
+EXPOSE 8080 8443 3000
+CMD ["nginx", "-g", "daemon off;"]

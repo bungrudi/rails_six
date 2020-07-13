@@ -9,7 +9,7 @@ production:
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
-        - mongo:27017
+        - localhost:27017
       options:
         # Change the default write concern. (default = { w: 1 })
         # write:
@@ -27,7 +27,7 @@ production:
         user: 'admin'
 
         # The password of the user for authentication.
-        password: 'password'
+        password: 'password@2020'
 
         # The user's database roles.
         # roles:
@@ -142,7 +142,7 @@ development:
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
-        - mongo:27017
+        - localhost:27017
       options:
         # Change the default write concern. (default = { w: 1 })
         # write:
@@ -160,7 +160,7 @@ development:
         user: 'admin'
 
         # The password of the user for authentication.
-        password: 'password'
+        password: 'password@2020'
 
         # The user's database roles.
         # roles:
@@ -275,7 +275,7 @@ test:
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
-        - mongo:27017
+        - localhost:27017
       options:
         # Change the default write concern. (default = { w: 1 })
         # write:
@@ -293,7 +293,7 @@ test:
         user: 'admin'
 
         # The password of the user for authentication.
-        password: 'password'
+        password: 'password@2020'
 
         # The user's database roles.
         # roles:

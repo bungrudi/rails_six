@@ -64,6 +64,7 @@ class ArticleList extends BaseList {
                     <th class="colnum">#</th>
                     <th class="title">Title</th>
                     <th class="slug">Slug</th>
+                    <th class="is_published">Published</th>
                     <th colspan="3" class="action">Action</th>
                 </tr>
             </thead>
@@ -74,30 +75,22 @@ class ArticleList extends BaseList {
         return html`
             <tbody>
                 ${this.data.map(
-                        (u, idx) =>
-                        html `
-                            ${idx % 2 == 0?
-                            html `
-                                <tr class="row-data row-data-even">
-                                    <td class="col-1">${idx+1}</td>
+                        (u, idx) => {
+                            let isEven = idx % 2 == 0
+                            return html`
+                                <tr class="row-data ${isEven?'row-data-even':'row-data-odd'}">
+                                    <td class="col-1">${idx + 1}</td>
                                     <td class="col-2">${u.title}</td>
                                     <td class="col-3">${u.slug}</td>
+                                    <td class="col-4">${u.published}</td>
                                     <td class="action"><img title="edit" src="${edit}" height="24" width="24" id="${u.id}" @click="${this.edit}"/></td>
                                     <td class="action"><img title="copy" src="${copy}" height="24" width="24" id="${u.id}" @click="${this.copy}"/></td>
                                     <td class="action"><img title="delete" src="${del}" height="24" width="24" id="${u.id}" @click="${this.confirmation}"/></td>
                                 </tr>
-                            `:
-                            html `
-                                <tr class="row-data row-data-odd">
-                                    <td class="col-1">${idx+1}</td>
-                                    <td class="col-2">${u.title}</td>
-                                    <td class="col-3">${u.slug}</td>
-                                    <td class="action"><img title="edit" src="${edit}" height="24" width="24" id="${u.id}" @click="${this.edit}"/></td>
-                                    <td class="action"><img title="copy" src="${copy}" height="24" width="24" id="${u.id}" @click="${this.copy}"/></td>
-                                    <td class="action"><img title="delete" src="${del}" height="24" width="24" id="${u.id}" @click="${this.confirmation}"/></td>
-                                </tr>
-                            `}
-            			`,
+                            ` 
+                            
+            			
+                        },
 					)
 				}
             </tbody>
@@ -107,7 +100,7 @@ class ArticleList extends BaseList {
     get footerTemplate() {
         return html`
             <tfoot>
-                <tr><td colspan="6"><h3>Pagination Here</h3></td></tr>
+                <tr><td colspan="7"><h3>Pagination Here</h3></td></tr>
             </tfoot>
         `;
     }

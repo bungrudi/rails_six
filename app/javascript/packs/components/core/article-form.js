@@ -1,10 +1,11 @@
 import { LitElement, html, css } from 'lit-element';
+require('custom-components/toggle-switch')
 
 class ArticleForm extends LitElement {
     constructor() {
         super();
         this.rich_editor = {};
-        this.article = {'id':'', 'title':'', 'slug':'', 'content':''};
+        this.article = {'id':'', 'title':'', 'slug':'', 'content':'', 'published':false};
         this.copy = 'false';
     }
 
@@ -37,8 +38,8 @@ class ArticleForm extends LitElement {
             } catch (error) {
                 console.error(error);
             }
-            console.log(data.payload);
             this.article = data.payload;
+            console.log(this.article);
         }
     }
 
@@ -165,6 +166,10 @@ class ArticleForm extends LitElement {
                     <label for='article-slug'>Slug</label>
                     <input id='article-slug' name='article-slug' type='text' .value="${this.article.slug}" @focus="${this.string_to_slug}"/>
                 </div>
+                <div class="form-row">
+                    <label for='article-published'>Published</label>
+                    <toggle-switch id="article-published" .checked=${this.article.published}></toggle-switch>
+                </div>
                 <div class='form-row'>
                     <label for='rich_editor'></label>
                     <iframe id="rich_editor" src="/tinymce" frameBorder="0" scrolling="no"></iframe>
@@ -247,6 +252,7 @@ class ArticleForm extends LitElement {
         if (objectId === '' || this.copy === 'true') {
             this.article.title = this.shadowRoot.getElementById('article-title').value;
             this.article.slug = this.shadowRoot.getElementById('article-slug').value;
+            this.article.published = this.shadowRoot.getElementById('article-published').checked;
             this.article.content = this.rich_editor.getContents();
             console.log(this.article);
             try {
@@ -264,6 +270,7 @@ class ArticleForm extends LitElement {
             this.article.id = this.shadowRoot.getElementById('article-id').value;
             this.article.title = this.shadowRoot.getElementById('article-title').value;
             this.article.slug = this.shadowRoot.getElementById('article-slug').value;
+            this.article.published = this.shadowRoot.getElementById('article-published').value;
             this.article.content = this.rich_editor.getContents();
             console.log(this.article);
             try {

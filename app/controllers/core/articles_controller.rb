@@ -5,7 +5,7 @@ class Core::ArticlesController < ApplicationController
     # before_action :authenticate_core_user!, except: :show
 
     # http://api.rubyonrails.org/classes/ActionController/ParamsWrapper.html
-    wrap_parameters :article, include: [:id, :title, :content, :slug]
+    wrap_parameters :article, include: [:id, :title, :content, :slug, :published]
 
     def index
         articles, page_count = article_service.find_articles(params[:page])
@@ -91,7 +91,7 @@ class Core::ArticlesController < ApplicationController
 
     # Using strong parameters
     def article_form_params
-        params.require(:article).permit(:id, :title, :content, :slug)
+        params.require(:article).permit(:id, :title, :content, :slug, :published)
         # params.require(:core_user).permit! # allow all
     end
 end

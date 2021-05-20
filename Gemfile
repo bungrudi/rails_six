@@ -25,7 +25,7 @@ gem 'capistrano'
 gem 'rails-controller-testing'
 gem 'tzinfo-data'
 gem 'execjs'
-gem 'puma', '~> 4.1'
+gem 'puma', '~> 4.3'
 
 group :development do
     gem 'byebug', platform: :mri
